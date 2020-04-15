@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1015325884739",
+    "firebase_url": "https://ffcc-app.firebaseio.com",
+    "project_id": "ffcc-app",
+    "storage_bucket": "ffcc-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015325884739:android:1765331fd1704deac8aff6",
+        "android_client_info": {
+          "package_name": "com.example.ffccapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015325884739-5qascjp4e7skdbgoamfll6upfl6jkj6f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ffccapp",
+            "certificate_hash": "8740511ddb443fa558a9fc8af8dd57c0c41544a2"
+          }
+        },
+        {
+          "client_id": "1015325884739-bmv2hdeu14d8pcns3on9b0vqb3qo3jlp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsIJ-jZEjCSjskoP4BTtO6pcNgakiYCZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015325884739-bmv2hdeu14d8pcns3on9b0vqb3qo3jlp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
