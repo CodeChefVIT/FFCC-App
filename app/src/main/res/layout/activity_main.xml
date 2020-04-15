@@ -40,18 +40,37 @@
                     android:ems="10"
                     android:hint="Phone Number"
                     android:inputType="phone"
-                android:layout_centerInParent="true"
+
                     />
+            <Button
+                android:id="@+id/send"
+                android:layout_width="162dp"
+                android:layout_height="49dp"
+                android:layout_below="@id/phone"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rectangle_2"
+                android:onClick="clickStartVerification"
+                android:text="SEND" />
+            <EditText
+                android:id="@+id/code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Verification code"
+                android:inputType="phone"
+                android:layout_below="@+id/send"
+                />
 
             <Button
                 android:id="@+id/login"
                 android:layout_width="162dp"
                 android:layout_height="49dp"
-                android:layout_below="@id/phone"
+                android:layout_below="@id/code"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/rectangle_2"
-                android:onClick="next"
+                android:onClick="logo"
                 android:text="LOGIN" />
         </RelativeLayout>
     </RelativeLayout>

@@ -20,7 +20,10 @@ public class Verify extends AppCompatActivity {
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private String verificationId;
-    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
+    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, " ");
+    private String mVerificationId;
+    private PhoneAuthProvider.ForceResendingToken mResendToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
