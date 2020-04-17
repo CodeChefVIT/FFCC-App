@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/BCE"
+    android:title="BCE" />
+    <item android:id="@+id/MCB"
+        android:title="MCB" />
+    <item android:id="@+id/BME"
+        android:title="BME" />
+    <item android:id="@+id/BIT"
+        android:title="BIT" />
+    <item android:id="@+id/BEE"
+        android:title="BEE" />
+    <item android:id="@+id/BDS"
+        android:title="BDS" />
+    <item android:id="@+id/BBT"
+        android:title="BBT" />
+</menu>
