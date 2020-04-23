@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:text="TextView"
+        android:textColor="#FFFFFF" />
+
+    <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
+        android:id="@+id/spinner"
+        android:layout_below="@id/num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="center_horizontal"
+        app:DoneSearchTintColor="@android:color/holo_purple"
+        app:RevealEmptyText="Touch to select"
+        app:RevealViewBackgroundColor="@android:color/holo_red_light"
+        app:SearchHintText="Enter subject"
+        app:SearchViewBackgroundColor="@android:color/white"
+        app:ShowBorders="false"
+        app:SpinnerExpandHeight="300dp"
+        app:StartSearchTintColor="@android:color/white" />
+
+</RelativeLayout>
