@@ -28,9 +28,11 @@ public class Main extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    static String choice;
     static ArrayList<Subs> numbers;
     static ArrayList<String> subjects;
     static ArrayList<String> sel;
+    static int nod;
     static int k[]={0,0,0,0,0,0,0};
     static ArrayList<String> checker(ArrayList<String> ac)
     {
@@ -67,16 +69,23 @@ public class Main extends AppCompatActivity {
         recyclerView=findViewById(R.id.rec);
         recyclerView.setHasFixedSize(true);
         subjects=new ArrayList<>();
-        Call<List<Teachers>> call = api.teachers("PHY1701");
-        call.enqueue(new Callback<List<Teachers>>() {
+        Call<List<Subjects>> call = api.makel();
+        call.enqueue(new Callback<List<Subjects>>() {
             @Override
-            public void onResponse(Call<List<Teachers>> call, Response<List<Teachers>> response) {
-                Toast.makeText(Main.this, response.code(), Toast.LENGTH_SHORT).show();
-
+            public void onResponse(Call<List<Subjects>> call, Response<List<Subjects>> response) {
+                if(response.code()==200)
+                {
+                    Subjects[] resp=response.body().toArray(new Subjects[0]);
+                        Toast.makeText(Main.this, "Response captured", Toast.LENGTH_SHORT).show();
+                        for(int i=0;i<resp.length;i++)
+                        {
+                            subjects.add(resp[i].getCode()+" "+resp[i].getTitle());
+                        }
+                }
             }
 
             @Override
-            public void onFailure(Call<List<Teachers>> call, Throwable t) {
+            public void onFailure(Call<List<Subjects>> call, Throwable t) {
 
                 Log.i("The error is",t.getMessage());
 
@@ -86,19 +95,12 @@ public class Main extends AppCompatActivity {
 
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        subjects.add("Aditya");
-        subjects.add("Aditya");
-        subjects.add("Aditya");subjects.add("Aditya");
 
 
         numbers=new ArrayList<Subs>();
-        numbers.add(new Subs(subjects,"Enter subject1:"));
-        numbers.add(new Subs(subjects,"Enter subject2:"));
-        numbers.add(new Subs(subjects,"Enter subject3:"));
-        numbers.add(new Subs(subjects,"Enter subject4:"));
-        numbers.add(new Subs(subjects,"Enter subject5:"));
-        numbers.add(new Subs(subjects,"Enter subject6:"));
-        numbers.add(new Subs(subjects,"Enter subject7:"));
+        for(int i=1;i<=nod;i++) {
+            numbers.add(new Subs(subjects, "Select subject "+i+":"));
+        }
         adapter=new SubsAdapter(this,numbers);
         recyclerView.setAdapter(adapter);
 
