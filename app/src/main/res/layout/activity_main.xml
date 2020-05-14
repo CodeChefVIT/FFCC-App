@@ -19,29 +19,39 @@
             android:id="@+id/rectangle_1"
             android:layout_width="353dp"
             android:layout_height="331dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="199dp"
             android:layout_centerInParent="true"
             android:background="@drawable/rectangle_1" />
 
         <RelativeLayout
-            android:layout_width="348dp"
-            android:layout_height="315dp"
-            android:layout_centerInParent="true">
+            android:layout_width="353dp"
+            android:layout_height="331dp"
+            android:layout_centerInParent="true"
+            >
 
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/send"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:text="Enter OTP manually in 30seconds"
+                android:visibility="invisible" />
 
             <EditText
-                    android:id="@+id/phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
-                    android:ems="10"
-                    android:hint="Phone Number"
-                    android:inputType="phone"
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="59dp"
+                android:ems="10"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:layout_marginLeft="12dp"
+                android:layout_centerHorizontal="true"
 
-                    />
+                />
             <Button
                 android:id="@+id/send"
                 android:layout_width="162dp"
@@ -52,15 +62,18 @@
                 android:background="@drawable/rectangle_2"
                 android:onClick="clickStartVerification"
                 android:text="SEND" />
+
             <EditText
                 android:id="@+id/code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/send"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="Verification code"
                 android:inputType="phone"
-                android:layout_below="@+id/send"
-                />
+                android:visibility="invisible" />
 
             <Button
                 android:id="@+id/login"
@@ -68,10 +81,11 @@
                 android:layout_height="49dp"
                 android:layout_below="@id/code"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="21dp"
                 android:background="@drawable/rectangle_2"
                 android:onClick="logo"
-                android:text="LOGIN" />
+                android:text="LOGIN"
+                android:visibility="invisible" />
         </RelativeLayout>
     </RelativeLayout>
 

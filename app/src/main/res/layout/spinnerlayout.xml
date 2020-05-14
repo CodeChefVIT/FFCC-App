@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        >
+
+        <TextView
+            android:id="@+id/num"
+            android:layout_width="154dp"
+            android:layout_height="20dp"
+            android:text="TextView"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.062"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.022" />
+
+        <ImageView
+            android:id="@+id/cros"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintHorizontal_bias="0.121"
+            app:layout_constraintStart_toEndOf="@+id/num"
+            app:layout_constraintVertical_bias="0.4"
+            tools:src="@drawable/cross"
+            android:layout_marginLeft="20dp"/>
+    </LinearLayout>
+
+</LinearLayout>
