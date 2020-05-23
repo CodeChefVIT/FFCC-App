@@ -13,8 +13,8 @@ public interface Api {
 
         String BASE_URL = "https://ffcc-website.herokuapp.com/";
 
-        @GET()
-        Call<List<Teachers>> teachers();
+        @GET("time/app/{id}")
+        Call<List<Teachers>> teachers(@Path("id") String a);
         @GET("time/subjectCode")
         Call<List<Subjects>> makel();
     }

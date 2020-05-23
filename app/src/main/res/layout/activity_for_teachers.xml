@@ -4,16 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Main"
+    tools:context=".ForTeachers"
     android:background="@drawable/back"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/next"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_alignParentTop="true">
+        android:layout_below="@id/textView">
 
     </gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner>
 
@@ -25,34 +36,33 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="7dp"
         android:background="#747070"
-        android:text="Your Selected Subjects"
-        android:layout_below="@id/spinner"
+        android:layout_alignParentTop="true"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="25dp" />
+        android:textSize="17dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rec"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/creds"
-        android:layout_below="@id/textView"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="14dp" />
-
-    <TextView
-        android:id="@+id/creds"
+        android:layout_below="@id/spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:fontFamily="sans-serif-condensed-light"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/bottom_navigation"
-        android:textColor="#000000"
-        android:textSize="20sp" />
+        android:layout_height="350dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="7dp" />
 
+    <Button
+        android:id="@+id/next"
+        android:layout_width="162dp"
+        android:layout_height="49dp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rectangle_2"
+        android:onClick="startnext"
+        android:text="NEXT" />
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,7 +71,5 @@
         app:itemTextColor="@drawable/selector"
         app:itemIconTint="@drawable/selector"
         app:menu="@menu/menu_layout"
-        android:layout_alignParentBottom="true">
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

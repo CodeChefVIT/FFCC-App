@@ -25,12 +25,13 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
     }
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView num;
+        TextView code;
+        TextView name;
         ImageView cros;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            num=itemView.findViewById(R.id.num);
-            cros=itemView.findViewById(R.id.cros);
+            name=itemView.findViewById(R.id.name);
+            code=itemView.findViewById(R.id.code);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -49,7 +50,8 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull SubsAdapter.ViewHolder holder, final int position) {
         holder.itemView.setTag(numbers.get(position));
-        holder.num.setText(numbers.get(position).getNum());
+        holder.name.setText(numbers.get(position).getName());
+        holder.code.setText(numbers.get(position).getCode());
     }
 
     @Override

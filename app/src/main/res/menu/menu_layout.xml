@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Subjects" android:id="@+id/main2" android:icon="@drawable/ic_class"/>
+    <item android:title="Teachers" android:id="@+id/forTeachers" android:icon="@drawable/people"/>
+    <item android:title="TimeTable" android:id="@+id/timeTable" android:icon="@drawable/ic_timetable"/>
+</menu>

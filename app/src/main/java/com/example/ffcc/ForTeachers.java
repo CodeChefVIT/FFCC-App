@@ -1,7 +1,11 @@
 package com.example.ffcc;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -16,23 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,35 +40,28 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Main extends AppCompatActivity {
-    TextView creds ;
-    static int noa;
-    Button next;
-    int tot;
+public class ForTeachers extends AppCompatActivity {
+    TextView creds,textView ;
     RecyclerView recyclerView;
     Handler handle;
+    Button next;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
     SearchableSpinner spinner;
-    ProgressDialog progressDoalog ;
-    String theory_choice;
+    static ProgressDialog progressDoalog ;
     static ArrayList<Subs> numbers;
-    static Set<String> codes;
-    static HashMap<String,Set<String>> choice;
-    static HashMap<String,String> subo;
-    static ArrayList<String> subcodes;
-    static HashMap<String,Integer> credit;
-    HashMap<String,ArrayList<String>> spin;
-    LinearLayout even,morn;
+    Set<String> codes;
+    Set<String>fac;
     public void setAnimationEntry() {
         if (Build.VERSION.SDK_INT > 20) {
             Explode explode = new Explode();
             explode.setDuration(1000);
+            explode.setInterpolator(new BounceInterpolator());
             Slide slide = new Slide();
             slide.setSlideEdge(Gravity.TOP);
             slide.setDuration(900);
             slide.setInterpolator(new DecelerateInterpolator());
-            getWindow().setExitTransition(explode);
+            getWindow().setExitTransition(slide);
             getWindow().setEnterTransition(explode);
         }
     }
@@ -87,33 +75,41 @@ public class Main extends AppCompatActivity {
         }
         return false;
     }
-    public void nextAc(View v)
+    boolean checker1(String k)
     {
-        if((tot>=16)&&(tot<=27)){
-        noa=0;
-        subcodes=new ArrayList<>(codes);
-        Intent I=new Intent(Main.this,ForTeachers.class);
+        int a=fac.size();
+        fac.add(k);
+        if(fac.size()>a)
+        {
+            return true;
+        }
+        return false;
+    }
+    public void startnext(View v)
+    {
+        Main.noa++;
+        if(Main.noa<Main.codes.size()) {
+            Intent I = new Intent(ForTeachers.this, ForTeachers.class);
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
-        if(codes.size()>=4) {
-            startActivity(I,options.toBundle());
+            if (true) {
+                //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
+                startActivity(I,options.toBundle());
+            } else {
+                Toast.makeText(this, "Please select at least 4 subjects", Toast.LENGTH_SHORT).show();
+            }
         }
         else{
-            Toast.makeText(this, "Please select at least 4 subjects", Toast.LENGTH_SHORT).show();
-        }}
-        else if(tot<16)
-        {
-            Toast.makeText(this, "Total credits is below 16.Please add more!!", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(this, "Total credits is above 27.Please remove some!!", Toast.LENGTH_SHORT).show();
+            Intent I=new Intent(ForTeachers.this,TimeTable.class);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
+            startActivity(I,options.toBundle());
         }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setAnimationEntry();
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_for_teachers);
 
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.main2);
@@ -122,17 +118,10 @@ public class Main extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId())
                 {
-                    case R.id.forTeachers:if((tot<16 || tot >27)||(codes.size()<4))
-                    {
-                        Toast.makeText(Main.this, "Please fill the subjects first", Toast.LENGTH_SHORT).show();
-                    }
-                        else{
-                        noa=0;
-                        subcodes=new ArrayList<>(codes);
-                        Intent I=new Intent(getApplicationContext(),ForTeachers.class);
-                    startActivity(I);
-                    return true;}
-                    case R.id.main2:return true;
+                    case R.id.main2:Intent I=new Intent(getApplicationContext(),Main.class);
+                        startActivity(I);
+                        return true;
+                    case R.id.forTeachers:return true;
                     case R.id.timeTable:Intent I2=new Intent(getApplicationContext(),TimeTable.class);
                         startActivity(I2);
                         return true;
@@ -142,29 +131,21 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        even=findViewById(R.id.ev);
-        morn=findViewById(R.id.mo);
-//        // create an alert builder
-//        final AlertDialog.Builder builde = new AlertDialog.Builder(this);
-//        builde.setCancelable(false);
-//        // set the custom layout
-//        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_layout, null);
-//        builde.setView(customLayout);
-//        builde.create();
-//        builde.show();
         codes=new HashSet<String>();
-        subo=new HashMap<>();
-        creds= findViewById(R.id.creds);
-        spin =new HashMap<>();
+        fac=new HashSet<>();
+        creds= findViewById(R.id.count);
+        textView=findViewById(R.id.textView);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Api.BASE_URL) // Specify your api here
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         Api api = retrofit.create(Api.class);
+        next=findViewById(R.id.next);
         spinner=findViewById(R.id.spinner);
-        creds.setText("Credits Taken:0");
+        String subjectCode=Main.subcodes.get(Main.noa);
+        textView.setText(subjectCode+"-"+Main.subo.get(subjectCode));
+        creds.setText("Page "+(Main.noa+1)+" of "+Main.subcodes.size());
         recyclerView=findViewById(R.id.rec);
-        next=findViewById(R.id.send);
         recyclerView.setHasFixedSize(true);
         spinner = (SearchableSpinner) findViewById(R.id.spinner);
 
@@ -176,12 +157,11 @@ public class Main extends AppCompatActivity {
                 progressDoalog.incrementProgressBy(1);
             }
         };
-        progressDoalog = new ProgressDialog(Main.this);
+        progressDoalog = new ProgressDialog(ForTeachers.this);
         progressDoalog.setMax(100);
         progressDoalog.setMessage("Its loading....");
         progressDoalog.setTitle("Downloading data ");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDoalog.setCancelable(false);
         progressDoalog.show();
         new Thread(new Runnable() {
             @Override
@@ -194,7 +174,6 @@ public class Main extends AppCompatActivity {
                         if (progressDoalog.getProgress() == progressDoalog
                                 .getMax()) {
                             progressDoalog.dismiss();
-
                         }
                     }
                 } catch (Exception e) {
@@ -202,7 +181,7 @@ public class Main extends AppCompatActivity {
                 }
             }
         }).start();
-        credit=new HashMap<>();
+
         handle.sendMessage(handle.obtainMessage());
         ArrayAdapter<String> adapters =
                 new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, contacts);
@@ -210,46 +189,28 @@ public class Main extends AppCompatActivity {
 
         spinner.setAdapter(adapters);
 
-        Call<List<Subjects>> call = api.makel();
-        call.enqueue(new Callback<List<Subjects>>() {
+        Call<List<Teachers>> call = api.teachers(subjectCode);
+        call.enqueue(new Callback<List<Teachers>>() {
             @Override
-            public void onResponse(Call<List<Subjects>> call, Response<List<Subjects>> response) {
+            public void onResponse(Call<List<Teachers>> call, Response<List<Teachers>> response) {
                 if(response.code()==200)
                 {
-                    Subjects[] resp=response.body().toArray(new Subjects[0]);
-                    String f="ARC";
-                    ArrayList<String> ff=new ArrayList<>();
+                    Teachers[] resp=response.body().toArray(new Teachers[0]);
+                    Set<String> so=new HashSet<>();
+                    Toast.makeText(ForTeachers.this, "Let's Go!!", Toast.LENGTH_SHORT).show();
                     for(int i=0;i<resp.length;i++)
                     {
-                        contacts.add(resp[i].getCode()+"  "+resp[i].getTitle());
-                        subo.put(resp[i].getCode(),resp[i].getTitle());
-                        credit.put(resp[i].getCode(),resp[i].getCredits());
-                        if(resp[i].getCode().substring(0,3).equals(f)==false)
-                        {
-                            spin.put(f,ff);
-                            ff.clear();
-                            f=resp[i].getCode().substring(0,3);
+                        String o=resp[i].getFaculty();
+                        if(checker1(o)==true) {
+                            contacts.add(resp[i].getFaculty());
                         }
-                        else
-                        {
-                            ff.add(resp[i].getCode()+"  "+resp[i].getTitle());
-                        }
-
                     }
-                    final Handler hand= new Handler();hand.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDoalog.cancel();
-                        Toast.makeText(Main.this, "Let's Go!!", Toast.LENGTH_SHORT).show();
-                        //Do something after 100ms
-                    }
-                }, 3000);
-
+                    progressDoalog.cancel();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Subjects>> call, Throwable t) {
+            public void onFailure(Call<List<Teachers>> call, Throwable t) {
 
                 Log.i("The error is",t.getMessage());
                 progressDoalog.cancel();
@@ -262,26 +223,16 @@ public class Main extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(View view, int position, long id) {
-                String k=contacts.get(position).substring(0, contacts.get(position).indexOf(' '));
+                String k=contacts.get(position);
                 boolean z=checker(k);
-                if(z==true) {
-                    numbers.add(new Subs(contacts.get(position).substring(0, contacts.get(position).indexOf(' ')), contacts.get(position).substring(contacts.get(position).indexOf(' ') + 1)));
-                    String l=creds.getText().toString().substring(14);
-                    try {
-                        int a = Integer.parseInt(l) + credit.get(contacts.get(position).substring(0, contacts.get(position).indexOf(' ')));
-                        tot=a;
-                        creds.setText("Credits Taken:"+String.valueOf(a));
-                    }
-                    catch (Exception e)
-                    {
-
-                    }
-
+                if(z==true)
+                {
+                    numbers.add(new Subs("", contacts.get(position)));
                     adapter.notifyDataSetChanged();
                 }
                 else
                 {
-                    Toast.makeText(Main.this, "You have selected the same subject again!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForTeachers.this, "You have selected the same teacher again!!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -296,6 +247,4 @@ public class Main extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         Toast.makeText(this, "FFCC", Toast.LENGTH_SHORT).show();
     }
-
-
 }

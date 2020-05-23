@@ -2,10 +2,15 @@ package com.example.ffcc;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +31,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +44,19 @@ public class MainActivity extends AppCompatActivity {
     Button login,send;
     SharedPreferences shared;
     String verified;
+     AlertDialog.Builder builder;
+    public boolean isConnected() {
+        boolean connected = false;
+        try {
+            ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo nInfo = cm.getActiveNetworkInfo();
+            connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+            return connected;
+        } catch (Exception e) {
+            Log.e("Connectivity Exception", e.getMessage());
+        }
+        return connected;
+    }
     public void logo(View v)
     {
         try {
@@ -137,11 +158,45 @@ public class MainActivity extends AppCompatActivity {
                 this,               // Activity (for callback binding)
                 mCallbacks);        // OnVerificationStateChangedCallbacks
     }
+    private void setMobileDataEnabled(Context context, boolean enabled) {
+        try{
+            final ConnectivityManager conman = (ConnectivityManager)  context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            final Class conmanClass = Class.forName(conman.getClass().getName());
+            final Field connectivityManagerField = conmanClass.getDeclaredField("mService");
+            connectivityManagerField.setAccessible(true);
+            final Object connectivityManager = connectivityManagerField.get(conman);
+            final Class connectivityManagerClass =  Class.forName(connectivityManager.getClass().getName());
+            final Method setMobileDataEnabledMethod = connectivityManagerClass.getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
+            setMobileDataEnabledMethod.setAccessible(true);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+            setMobileDataEnabledMethod.invoke(connectivityManager, enabled);}
+    catch (Exception e)
+    {
+        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+    }
+    void maker()
+    {
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("No Internet!").setMessage("Connect to Wifi or Mobile data").setCancelable(false).setPositiveButton("DONE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!isConnected())
+                {
+                    maker();
+
+                }
+                else{
+                    creator();
+                }
+
+            }
+        });
+        builder.create();
+        builder.show();
+    }
+    void creator()
+    {
         try {
             mAuth = FirebaseAuth.getInstance();
             shared = this.getSharedPreferences("com.example.ffcc", Context.MODE_PRIVATE);
@@ -157,17 +212,29 @@ public class MainActivity extends AppCompatActivity {
             if (verified.equals("YES")) {
                 start();
             }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error in creator", Toast.LENGTH_SHORT).show();
         }
-        catch (Exception e)
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        if (isConnected() == false) {
+            maker();
+        }
+        else
         {
-
+            creator();
         }
+
     }
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
             Toast.makeText(MainActivity.this, "Verification successful", Toast.LENGTH_SHORT).show();
-            shared.edit().putString("v","YES").apply();
+            shared.edit().putString("v", "YES").apply();
             start();
 
         }
@@ -181,13 +248,13 @@ public class MainActivity extends AppCompatActivity {
         public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
             Toast.makeText(MainActivity.this, "Code has been sent", Toast.LENGTH_SHORT).show();
-            Log.i("The s value:",s);
-            codesent=s;
+            Log.i("The s value:", s);
+            codesent = s;
         }
     };
     void start()
     {
-        Intent I=new Intent(MainActivity.this,Selector.class);
+        Intent I=new Intent(MainActivity.this,Main.class);
         startActivity(I);
     }
 }

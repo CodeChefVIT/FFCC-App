@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Choose your Theory Slot"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="12dp"
+        android:textAlignment="center"
+        android:textSize="25sp"/>
+
+    <LinearLayout
+        android:layout_width="170dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:layout_below="@id/textView3"
+        android:id="@+id/ev"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:clickable="true">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            tools:src="@drawable/evening2" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Evening"
+            android:textSize="15dp"
+            android:layout_marginTop="7dp"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mo"
+        android:layout_width="170dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/textView3"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+        android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            tools:src="@drawable/morning2" />
+
+        <TextView
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:layout_marginTop="7dp"
+            android:text="Morning"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+</RelativeLayout>

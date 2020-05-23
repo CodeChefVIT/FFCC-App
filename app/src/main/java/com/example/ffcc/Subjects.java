@@ -10,7 +10,17 @@ public class Subjects {
     @SerializedName("TITLE")
     @Expose
     String title;
+    @SerializedName("CREDITS")
+    @Expose
+    int credits;
 
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
 
     public String getCode() {
         return code;
