@@ -143,7 +143,7 @@ public class ForTeachers extends AppCompatActivity {
         next=findViewById(R.id.next);
         spinner=findViewById(R.id.spinner);
         String subjectCode=Main.subcodes.get(Main.noa);
-        textView.setText(subjectCode+"-"+Main.subo.get(subjectCode));
+        textView.setText(subjectCode+"-"+MainActivity.subo.get(subjectCode));
         creds.setText("Page "+(Main.noa+1)+" of "+Main.subcodes.size());
         recyclerView=findViewById(R.id.rec);
         recyclerView.setHasFixedSize(true);

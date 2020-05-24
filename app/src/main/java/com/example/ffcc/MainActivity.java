@@ -33,6 +33,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     Button login,send;
     SharedPreferences shared;
     String verified;
+    static Subjects[] respo;
+    static HashMap<String,String> subo;//Created a map with subject code as key and title as the value
+    static HashMap<String,Integer> cre;
      AlertDialog.Builder builder;
     public boolean isConnected() {
         boolean connected = false;
@@ -221,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        cre=new HashMap<>();
         if (isConnected() == false) {
             maker();
         }
