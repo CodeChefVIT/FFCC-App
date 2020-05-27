@@ -1,5 +1,5 @@
 const express = require('express')
-var async = require('async');
+var async = require('async')
 const { MongoClient, ObjectID } = require('mongodb')
 const app = express()
 const port = process.env.PORT || 3000
@@ -8,13 +8,9 @@ app.use(express.json())
 const data = require('./dataReviews')
 
 
-console.log(data.length)
-console.log('trying the change')
-
-
 // DataBase Config
 // const db = require('./config/keys').mongoURI;
-const connectionURL = 'mongodb+srv://jugalbhatt123:Panujugu123@cluster0-cmlwg.mongodb.net/test?retryWrites=true&w=majority'
+const connectionURL = process.env.DBURL
 const databaseName = "TEST"
 
 
@@ -36,7 +32,6 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
            
         })
     })
-
     app.get('/time/app/:code',async(req,res)=>{
         if(!req.params.code){
             throw new Error('Enter subject code')
@@ -47,9 +42,33 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
         })
     })
 
-    app.get("/time/subjectCode",(req,res)=>{
+    // app.get("/time/subjectCode",(req,res)=>{
+    //     var mysort = {CODE: 1 };
+    //     db.collection('user').find({}).project({TITLE: 1,_id: 0,CODE: 1,CREDITS:1}).sort(mysort).toArray((error,result)=>{
+    //         const standardsList=result
+    //         // res.send(result)
+    //         function uniqurArray(standardsList){
+    //     var a = standardsList.concat();
+    //    for(var i=0; i<a.length; i++) {
+    //        for(var j=i+1; j<a.length; j++) {
+    //            if(a[i].CODE === a[j].CODE){
+    //                a.splice(j--, 1);
+    //            }
+    //        }
+    //    }
+    
+    //    return a;
+    // }
+    
+    // res.send(uniqurArray(standardsList))
+    
+    //     })
+    
+    // })
+
+    app.get("/time/subjectlab",(req,res)=>{
         var mysort = {CODE: 1 };
-        db.collection('user').find({}).project({TITLE: 1,_id: 0,CODE: 1,CREDITS:1}).sort(mysort).toArray((error,result)=>{
+        db.collection('user').find({TYPE:'ELA'}).project({TITLE: 1,_id: 0,CODE: 1,CREDITS:1,TYPE:1}).sort(mysort).toArray((error,result)=>{
             const standardsList=result
             // res.send(result)
             function uniqurArray(standardsList){
@@ -70,6 +89,61 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
         })
     
     })
+
+    app.get("/time/subjectproject",(req,res)=>{
+        var mysort = {CODE: 1 };
+        db.collection('user').find({TYPE:'EPJ'}).project({TITLE: 1,_id: 0,CODE: 1,CREDITS:1,TYPE:1}).sort(mysort).toArray((error,result)=>{
+            const standardsList=result
+            // res.send(result)
+            function uniqurArray(standardsList){
+        var a = standardsList.concat();
+       for(var i=0; i<a.length; i++) {
+           for(var j=i+1; j<a.length; j++) {
+               if(a[i].CODE === a[j].CODE){
+                   a.splice(j--, 1);
+               }
+           }
+       }
+    
+       return a;
+    }
+    
+    res.send(uniqurArray(standardsList))
+    
+        })
+    
+    })
+
+    app.get('/time/checkProject/:code', async(req,res)=>{
+        if(!req.params.code){
+            throw new Error('Enter subject code')
+        }
+            var mysort = {REVIEW:-1}
+            db.collection('user').find({ CODE: req.params.code,TYPE:'EPJ' }).sort(mysort).toArray((error, result) => {
+            res.send(result)
+        })
+    })
+
+    app.get('/time/checkLab/:code', async(req,res)=>{
+        if(!req.params.code){
+            throw new Error('Enter subject code')
+        }
+            var mysort = {REVIEW:-1}
+            db.collection('user').find({ CODE: req.params.code,TYPE:'ELA' }).sort(mysort).toArray((error, result) => {
+            res.send(result)
+        })
+    })
+
+    app.get("/time/subjectCode",(req,res)=>{
+        var mysort = {CODE: 1 };
+        db.collection('Subjects').find({}).toArray((error,result)=>{
+            res.send(result)
+ 
+    
+        })
+    
+    })
+
 
     app.patch('/time',(req,res)=>{
         db.collection('user').updateMany({},{$set:{"REVIEW":0}})
