@@ -122,28 +122,28 @@ public class Main extends AppCompatActivity {
         outState.putStringArrayList("Codes",subcodes);
 
     }
-    protected void onRestoreInstanceState (Bundle outState) {
-
-        super.onRestoreInstanceState(outState);
-        tot=outState.getInt("Credits");
-        theory_choice=outState.getString("Choice");
-        contacts=outState.getStringArrayList("Subjects list");
-        subcodes=outState.getStringArrayList("Codes");
-        codes=new HashSet<String>(subcodes) ;
-        creds.setText("Credits Taken:"+tot);
-        credit=MainActivity.cre;
-        ArrayAdapter<String> adapters =
-                new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, contacts);
-        adapters.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapters);
-
-        layoutManager=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter=new SubsAdapter(this,numbers);
-        recyclerView.setAdapter(adapter);
-        
-    }
+//    protected void onRestoreInstanceState (Bundle outState) {
+//
+//        super.onRestoreInstanceState(outState);
+//        tot=outState.getInt("Credits");
+//        theory_choice=outState.getString("Choice");
+//        contacts=outState.getStringArrayList("Subjects list");
+//        subcodes=outState.getStringArrayList("Codes");
+//        codes=new HashSet<String>(subcodes) ;
+//        creds.setText("Credits Taken:"+tot);
+//        credit=MainActivity.cre;
+//        ArrayAdapter<String> adapters =
+//                new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, contacts);
+//        adapters.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+//
+//        spinner.setAdapter(adapters);
+//
+//        layoutManager=new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(layoutManager);
+//        adapter=new SubsAdapter(this,numbers);
+//        recyclerView.setAdapter(adapter);
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,111 +188,140 @@ public class Main extends AppCompatActivity {
         MainActivity.subo=new HashMap<>();
         creds= findViewById(R.id.creds);
         spin =new HashMap<>();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Api.BASE_URL) // Specify your api here
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Api api = retrofit.create(Api.class);
-        spinner=findViewById(R.id.spinner);
-        creds.setText("Credits Taken:0");
         recyclerView=findViewById(R.id.rec);
+        spinner=findViewById(R.id.spinner);
+        contacts = new ArrayList<>();
         next=findViewById(R.id.send);
         recyclerView.setHasFixedSize(true);
-        spinner = findViewById(R.id.spinner);
-
-        contacts = new ArrayList<>();
-        handle = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                progressDoalog.incrementProgressBy(1);
-            }
-        };
-        progressDoalog = new ProgressDialog(Main.this);
-        progressDoalog.setMax(100);
-        progressDoalog.setMessage("Its loading....");
-        progressDoalog.setTitle("Downloading data ");
-        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDoalog.setCancelable(false);
-        progressDoalog.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (progressDoalog.getProgress() <= progressDoalog
-                            .getMax()) {
-                        Thread.sleep(200);
-                        handle.sendMessage(handle.obtainMessage());
-                        if (progressDoalog.getProgress() == progressDoalog
-                                .getMax()) {
-                            progressDoalog.dismiss();
-
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
         credit=new HashMap<>();
-        handle.sendMessage(handle.obtainMessage());
+
         ArrayAdapter<String> adapters =
                 new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, contacts);
         adapters.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-
         spinner.setAdapter(adapters);
-
-        Call<List<Subjects>> call = api.makel();
-        call.enqueue(new Callback<List<Subjects>>() {
-            @Override
-            public void onResponse(Call<List<Subjects>> call, Response<List<Subjects>> response) {
-                if(response.code()==200)
-                {
-                    Subjects[] resp=response.body().toArray(new Subjects[0]);
-                    MainActivity.respo=resp;
-                    String f="ARC";
-                    ArrayList<String> ff=new ArrayList<>();
-                    for(int i=0;i<resp.length;i++)
-                    {
-                        contacts.add(resp[i].getCode()+"  "+resp[i].getTitle());
-                        MainActivity.subo.put(resp[i].getCode(),resp[i].getTitle());
-                        credit.put(resp[i].getCode(),resp[i].getCredits());
-                        MainActivity.cre.put(resp[i].getCode(),resp[i].getCredits());
-                        if(resp[i].getCode().substring(0,3).equals(f)==false)
-                        {
-                            spin.put(f,ff);
-                            ff.clear();
-                            f=resp[i].getCode().substring(0,3);
-                        }
-                        else
-                        {
-                            ff.add(resp[i].getCode()+"  "+resp[i].getTitle());
-                        }
-
-                    }
-                    final Handler hand= new Handler();hand.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDoalog.cancel();
-                        Toast.makeText(Main.this, "Let's Go!!", Toast.LENGTH_SHORT).show();
-                        //Do something after 100ms
-                    }
-                }, 3000);
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Subjects>> call, Throwable t) {
-
-                Log.i("The error is",t.getMessage());
-                progressDoalog.cancel();
-                System.exit(0);
-
-            }
-        });
         numbers=new ArrayList<Subs>();
         adapter=new SubsAdapter(this,numbers);
+        layoutManager=new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter=new SubsAdapter(this,numbers);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int id=v.getId();
+                Toast.makeText(Main.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+
+        if(savedInstanceState==null)
+        {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(Api.BASE_URL) // Specify your api here
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            Api api = retrofit.create(Api.class);
+
+            creds.setText("Credits Taken:0");
+
+
+            handle = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    progressDoalog.incrementProgressBy(1);
+                }
+            };
+            progressDoalog = new ProgressDialog(Main.this);
+            progressDoalog.setMax(100);
+            progressDoalog.setMessage("Its loading....");
+            progressDoalog.setTitle("Downloading data ");
+            progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDoalog.setCancelable(false);
+            progressDoalog.show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (progressDoalog.getProgress() <= progressDoalog
+                                .getMax()) {
+                            Thread.sleep(200);
+                            handle.sendMessage(handle.obtainMessage());
+                            if (progressDoalog.getProgress() == progressDoalog
+                                    .getMax()) {
+                                progressDoalog.dismiss();
+
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+            Call<List<Subjects>> call = api.makel();
+            call.enqueue(new Callback<List<Subjects>>() {
+                @Override
+                public void onResponse(Call<List<Subjects>> call, Response<List<Subjects>> response) {
+                    if(response.code()==200)
+                    {
+                        Subjects[] resp=response.body().toArray(new Subjects[0]);
+                        MainActivity.respo=resp;
+                        String f="ARC";
+                        ArrayList<String> ff=new ArrayList<>();
+                        for(int i=0;i<resp.length;i++)
+                        {
+                            contacts.add(resp[i].getCode()+"  "+resp[i].getTitle());
+                            MainActivity.subo.put(resp[i].getCode(),resp[i].getTitle());
+                            credit.put(resp[i].getCode(),resp[i].getCredits());
+                            MainActivity.cre.put(resp[i].getCode(),resp[i].getCredits());
+                            if(resp[i].getCode().substring(0,3).equals(f)==false)
+                            {
+                                spin.put(f,ff);
+                                ff.clear();
+                                f=resp[i].getCode().substring(0,3);
+                            }
+                            else
+                            {
+                                ff.add(resp[i].getCode()+"  "+resp[i].getTitle());
+                            }
+
+                        }
+                        final Handler hand= new Handler();hand.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDoalog.cancel();
+                            Toast.makeText(Main.this, "Let's Go!!", Toast.LENGTH_SHORT).show();
+                            //Do something after 100ms
+                        }
+                    }, 3000);
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Subjects>> call, Throwable t) {
+
+                    Log.i("The error is",t.getMessage());
+                    progressDoalog.cancel();
+                    System.exit(0);
+
+                }
+            });
+            handle.sendMessage(handle.obtainMessage());
+        }
+        else{
+                    tot=savedInstanceState.getInt("Credits");
+        theory_choice=savedInstanceState.getString("Choice");
+        contacts=savedInstanceState.getStringArrayList("Subjects list");
+        subcodes=savedInstanceState.getStringArrayList("Codes");
+        codes=new HashSet<String>(subcodes) ;
+        creds.setText("Credits Taken:"+tot);
+        credit=MainActivity.cre;
+        adapter.notifyDataSetChanged();
+        }
+
+
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(View view, int position, long id) {
@@ -324,11 +353,7 @@ public class Main extends AppCompatActivity {
 
             }
         });
-        layoutManager=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter=new SubsAdapter(this,numbers);
-        recyclerView.setAdapter(adapter);
-        Toast.makeText(this, "FFCC", Toast.LENGTH_SHORT).show();
+
     }
 
 

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,11 +28,13 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
     {
         TextView code;
         TextView name;
+        ImageButton img;
         ImageView cros;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name=itemView.findViewById(R.id.name);
             code=itemView.findViewById(R.id.code);
+            img=itemView.findViewById(R.id.img);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -52,6 +55,7 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
         holder.itemView.setTag(numbers.get(position));
         holder.name.setText(numbers.get(position).getName());
         holder.code.setText(numbers.get(position).getCode());
+        holder.img.setImageResource(R.drawable.ic_cross);
     }
 
     @Override
