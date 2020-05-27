@@ -9,6 +9,7 @@ const data = require('./dataReviews')
 
 
 console.log(data.length)
+console.log('trying the change')
 
 
 // DataBase Config
