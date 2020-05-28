@@ -112,7 +112,7 @@ public class ForTeachers extends AppCompatActivity {
         setContentView(R.layout.activity_for_teachers);
 
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.main2);
+        bottomNavigationView.setSelectedItemId(R.id.forTeachers);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -202,7 +202,10 @@ public class ForTeachers extends AppCompatActivity {
                     {
                         String o=resp[i].getFaculty();
                         if(checker1(o)==true) {
-                            contacts.add(resp[i].getFaculty());
+                            if(resp[i].getFlag()==String.valueOf(Main.theory_choice)) {
+                                contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
+                            }
+
                         }
                     }
                     progressDoalog.cancel();
@@ -227,7 +230,7 @@ public class ForTeachers extends AppCompatActivity {
                 boolean z=checker(k);
                 if(z==true)
                 {
-                    numbers.add(new Subs("", contacts.get(position)));
+                    numbers.add(new Subs(contacts.get(position).substring(2,contacts.get(position).indexOf(':')), contacts.get(position).substring(contacts.get(position).indexOf(':')+1)));
                     adapter.notifyDataSetChanged();
                 }
                 else

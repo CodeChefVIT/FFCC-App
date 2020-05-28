@@ -60,6 +60,10 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return numbers.size();
+
+        if(numbers!=null){return numbers.size();}
+        else{
+            return 0;
+        }
     }
 }

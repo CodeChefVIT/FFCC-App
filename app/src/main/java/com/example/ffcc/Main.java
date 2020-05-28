@@ -3,7 +3,9 @@ package com.example.ffcc;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +22,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +36,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -62,7 +68,7 @@ public class Main extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     SearchableSpinner spinner;
     ProgressDialog progressDoalog ;
-    String theory_choice;//Choice of slots
+    static int theory_choice;//Choice of slots
     ArrayList<String> contacts;//Subjects list for the spinner
     static ArrayList<Subs> numbers;//Subjects in the form of class
     static Set<String> codes;//set to store all the courses selected
@@ -70,7 +76,10 @@ public class Main extends AppCompatActivity {
     static ArrayList<String> subcodes;//Array form of codes
     static HashMap<String,Integer> credit;//credit as value and code as key
     HashMap<String,ArrayList<String>> spin;//Code alphabet part as key and the list of subjects with the same code as the value
-    LinearLayout even,morn;
+    TextView textView2,editText;
+    ImageView imageView,imageView2;
+    AlertDialog.Builder builde;
+    AlertDialog h;
     //Response of our backend
     public void setAnimationEntry() {
         if (Build.VERSION.SDK_INT > 20) {
@@ -112,44 +121,103 @@ public class Main extends AppCompatActivity {
             Toast.makeText(this, "Total credits is above 27.Please remove some!!", Toast.LENGTH_SHORT).show();
         }
     }
+    @Override
+    protected  void onStop() {
 
+        super.onStop();
+        Toast.makeText(this, "OnStop", Toast.LENGTH_SHORT).show();
+        SharedPreferences settings = getSharedPreferences("Data",0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.clear();
+        editor.putInt("Credits",tot);
+        editor.putInt("Choice",theory_choice);
+//        Gson gson = new Gson();
+//        String json = gson.toJson(numbers);
+//        editor.putString("MyObject", json);
+        if(contacts.size()==0)
+        {
+            editor.putStringSet("Subject List",new HashSet<String>());
+        }
+        else {
+            editor.putStringSet("Subject List", new HashSet<String>(contacts));
+        }
+        if(subcodes!=null) {
+            editor.putStringSet("Codes", new HashSet<String>(subcodes));
+        }
+        else
+        {
+            editor.putStringSet("Codes", new HashSet<String>());
+        }
+        editor.commit();
+
+    }
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        SharedPreferences preferences =getSharedPreferences("Data",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+        Toast.makeText(this, "OnDestroy", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected  void onResume() {
+
+        super.onResume();
+        Toast.makeText(this, "OnResume", Toast.LENGTH_SHORT).show();
+        SharedPreferences settings = getSharedPreferences("Data",MODE_PRIVATE);
+        tot=settings.getInt("Credits",0);
+        theory_choice=settings.getInt("Choice",0);
+        Set<String> strings = new HashSet<>();
+        contacts=new ArrayList<>(settings.getStringSet("Subjects list",strings));
+        subcodes=new ArrayList<>(settings.getStringSet("Codes",strings));
+        codes=new HashSet<String>(subcodes) ;
+        creds.setText("Credits Taken:"+tot);
+        credit=MainActivity.cre;
+        ArrayAdapter<String> adapters =
+                new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, contacts);
+        adapters.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapters);
+
+        layoutManager=new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter=new SubsAdapter(this,numbers);
+        recyclerView.setAdapter(adapter);
+        adapters.notifyDataSetChanged();
+
+
+    }
+    ArrayAdapter<String> adapters;
+    public void ase(View V)
+    {
+        theory_choice=0;
+        h.cancel();
+    }
+    public void asm(View V)
+    {
+        theory_choice=1;
+        h.cancel();
+    }
     protected void onSaveInstanceState (Bundle outState) {
 
         super.onSaveInstanceState(outState);
         outState.putInt("Credits",tot);
-        outState.putString("Choice",theory_choice);
+        outState.putInt("Choice",theory_choice);
         outState.putStringArrayList("Subjects list",contacts);
         outState.putStringArrayList("Codes",subcodes);
 
     }
-//    protected void onRestoreInstanceState (Bundle outState) {
-//
-//        super.onRestoreInstanceState(outState);
-//        tot=outState.getInt("Credits");
-//        theory_choice=outState.getString("Choice");
-//        contacts=outState.getStringArrayList("Subjects list");
-//        subcodes=outState.getStringArrayList("Codes");
-//        codes=new HashSet<String>(subcodes) ;
-//        creds.setText("Credits Taken:"+tot);
-//        credit=MainActivity.cre;
-//        ArrayAdapter<String> adapters =
-//                new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, contacts);
-//        adapters.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-//
-//        spinner.setAdapter(adapters);
-//
-//        layoutManager=new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(layoutManager);
-//        adapter=new SubsAdapter(this,numbers);
-//        recyclerView.setAdapter(adapter);
-//
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setAnimationEntry();
         setContentView(R.layout.activity_main2);
+        textView2=findViewById(R.id.textView2);
+        editText=findViewById(R.id.editText);
+        imageView=findViewById(R.id.imageView);
+        imageView2=findViewById(R.id.imageView2);
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.main2);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -160,6 +228,7 @@ public class Main extends AppCompatActivity {
                     case R.id.forTeachers:if((tot<16 || tot >27)||(codes.size()<4))
                     {
                         Toast.makeText(Main.this, "Please fill the subjects first", Toast.LENGTH_SHORT).show();
+                        return false;
                     }
                         else{
                         nextAc();
@@ -174,16 +243,28 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        even=findViewById(R.id.ev);
-        morn=findViewById(R.id.mo);
-//        // create an alert builder
-//        final AlertDialog.Builder builde = new AlertDialog.Builder(this);
+        // create an alert builder
+        builde = new AlertDialog.Builder(this);
+//        builde.setTitle("Select your choice for theory subjects");
 //        builde.setCancelable(false);
+//        builde.setPositiveButton("MORNING", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//                theory_choice="MORN";
+//            }
+//        }).setNegativeButton("EVENING", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                theory_choice="EVEN";
+//            }
+//        });
 //        // set the custom layout
-//        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_layout, null);
-//        builde.setView(customLayout);
-//        builde.create();
-//        builde.show();
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_layout, null);
+        builde.setView(customLayout);
+        h=builde.create();
+
+
         codes=new HashSet<String>();
         MainActivity.subo=new HashMap<>();
         creds= findViewById(R.id.creds);
@@ -251,7 +332,7 @@ public class Main extends AppCompatActivity {
                             if (progressDoalog.getProgress() == progressDoalog
                                     .getMax()) {
                                 progressDoalog.dismiss();
-
+                                h.show();
                             }
                         }
                     } catch (Exception e) {
@@ -311,8 +392,9 @@ public class Main extends AppCompatActivity {
             handle.sendMessage(handle.obtainMessage());
         }
         else{
-                    tot=savedInstanceState.getInt("Credits");
-        theory_choice=savedInstanceState.getString("Choice");
+            Toast.makeText(this, "OnCreate", Toast.LENGTH_SHORT).show();
+            tot=savedInstanceState.getInt("Credits");
+        theory_choice=savedInstanceState.getInt("Choice");
         contacts=savedInstanceState.getStringArrayList("Subjects list");
         subcodes=savedInstanceState.getStringArrayList("Codes");
         codes=new HashSet<String>(subcodes) ;
