@@ -52,6 +52,7 @@ public class ForTeachers extends AppCompatActivity {
     static ArrayList<Subs> numbers;
     Set<String> codes;
     Set<String>fac;
+    int th;
     public void setAnimationEntry() {
         if (Build.VERSION.SDK_INT > 20) {
             Explode explode = new Explode();
@@ -93,6 +94,7 @@ public class ForTeachers extends AppCompatActivity {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             if (true) {
                 //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
+                I.putExtra("Cho",th);
                 startActivity(I,options.toBundle());
             } else {
                 Toast.makeText(this, "Please select at least 4 subjects", Toast.LENGTH_SHORT).show();
@@ -111,6 +113,14 @@ public class ForTeachers extends AppCompatActivity {
         setAnimationEntry();
         setContentView(R.layout.activity_for_teachers);
 
+        Intent I=getIntent();
+        try {
+            th = I.getIntExtra("Cho", 4);
+        }
+        catch(Exception e)
+        {
+            th=4;
+        }
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.forTeachers);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -143,7 +153,7 @@ public class ForTeachers extends AppCompatActivity {
         next=findViewById(R.id.next);
         spinner=findViewById(R.id.spinner);
         String subjectCode=Main.subcodes.get(Main.noa);
-        textView.setText(subjectCode+"-"+MainActivity.subo.get(subjectCode));
+        textView.setText(subjectCode+"-"+Main.subo.get(subjectCode));
         creds.setText("Page "+(Main.noa+1)+" of "+Main.subcodes.size());
         recyclerView=findViewById(R.id.rec);
         recyclerView.setHasFixedSize(true);
@@ -202,7 +212,7 @@ public class ForTeachers extends AppCompatActivity {
                     {
                         String o=resp[i].getFaculty();
                         if(checker1(o)==true) {
-                            if(resp[i].getFlag()==String.valueOf(Main.theory_choice)) {
+                            if(resp[i].getFlag().equals(String.valueOf(th))||(th==4)) {
                                 contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
                             }
 

@@ -42,7 +42,7 @@
 
             <TextView
                 android:id="@+id/name"
-                android:layout_width="230dp"
+                android:layout_width="550dp"
                 android:layout_height="50dp"
                 android:text="TextView"
                 android:layout_gravity="fill"
@@ -51,10 +51,10 @@
             <ImageButton
                 android:id="@+id/img"
                 android:layout_width="30dp"
-                android:layout_height="30dp"
                 android:layout_marginLeft="15dp"
-                android:background="#00FFFFFF"
-                app:srcCompat="@drawable/ic_cross" />
+                android:layout_height="30dp"
+                app:srcCompat="@drawable/ic_cross"
+                />
 
 
         </LinearLayout>

@@ -58,16 +58,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Main extends AppCompatActivity {
-    TextView creds ;
+    static TextView creds ;
     static int noa;
     Button next;
-    int tot;
-    RecyclerView recyclerView;
+    static int tot;
+    static RecyclerView recyclerView;
     Handler handle;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
     SearchableSpinner spinner;
     ProgressDialog progressDoalog ;
+    static HashMap<String,String> subo;
     static int theory_choice;//Choice of slots
     ArrayList<String> contacts;//Subjects list for the spinner
     static ArrayList<Subs> numbers;//Subjects in the form of class
@@ -107,6 +108,7 @@ public class Main extends AppCompatActivity {
         Intent I=new Intent(Main.this,ForTeachers.class);
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
         if(codes.size()>=4) {
+            I.putExtra("Cho",theory_choice);
             startActivity(I,options.toBundle());
         }
         else{
@@ -141,8 +143,10 @@ public class Main extends AppCompatActivity {
         else {
             editor.putStringSet("Subject List", new HashSet<String>(contacts));
         }
-        if(subcodes!=null) {
-            editor.putStringSet("Codes", new HashSet<String>(subcodes));
+
+        if(codes!=null) {
+            editor.putStringSet("Codes", codes);
+            Toast.makeText(this, String.valueOf(codes.size()), Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -155,17 +159,28 @@ public class Main extends AppCompatActivity {
     protected void onDestroy() {
 
         super.onDestroy();
-        SharedPreferences preferences =getSharedPreferences("Data",MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
-        editor.apply();
+        if(isChangingConfigurations())
+        {
+        }
+        else {
+            SharedPreferences preferences = getSharedPreferences("Data", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
+        }
         Toast.makeText(this, "OnDestroy", Toast.LENGTH_SHORT).show();
     }
+    int n=1;
     @Override
     protected  void onResume() {
 
         super.onResume();
-        Toast.makeText(this, "OnResume", Toast.LENGTH_SHORT).show();
+        if((progressDoalog!=null)&&(n==0))
+        {
+            progressDoalog.dismiss();
+        }
+
+        
         SharedPreferences settings = getSharedPreferences("Data",MODE_PRIVATE);
         tot=settings.getInt("Credits",0);
         theory_choice=settings.getInt("Choice",0);
@@ -173,6 +188,11 @@ public class Main extends AppCompatActivity {
         contacts=new ArrayList<>(settings.getStringSet("Subjects list",strings));
         subcodes=new ArrayList<>(settings.getStringSet("Codes",strings));
         codes=new HashSet<String>(subcodes) ;
+        if(contacts!=null){
+        for(int i=0;i<contacts.size();i++)
+        {
+           subo.put(contacts.get(i).substring(0,7),contacts.get(i).substring(8));
+        }}
         creds.setText("Credits Taken:"+tot);
         credit=MainActivity.cre;
         ArrayAdapter<String> adapters =
@@ -180,7 +200,12 @@ public class Main extends AppCompatActivity {
         adapters.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapters);
-
+        numbers.clear();
+        Toast.makeText(this, String.valueOf(subo.size()), Toast.LENGTH_SHORT).show();
+        for(int i=0;i<codes.size();i++)
+        {
+            numbers.add(new Subs(subcodes.get(i),subo.get(subcodes.get(i))));
+        }
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter=new SubsAdapter(this,numbers);
@@ -200,19 +225,20 @@ public class Main extends AppCompatActivity {
         theory_choice=1;
         h.cancel();
     }
-    protected void onSaveInstanceState (Bundle outState) {
-
-        super.onSaveInstanceState(outState);
-        outState.putInt("Credits",tot);
-        outState.putInt("Choice",theory_choice);
-        outState.putStringArrayList("Subjects list",contacts);
-        outState.putStringArrayList("Codes",subcodes);
-
-    }
+//    protected void onSaveInstanceState (Bundle outState) {
+//
+//        super.onSaveInstanceState(outState);
+//        outState.putInt("Credits",tot);
+//        outState.putInt("Choice",theory_choice);
+//        outState.putStringArrayList("Subjects list",contacts);
+//        outState.putStringArrayList("Codes",subcodes);
+//
+//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setAnimationEntry();
+        theory_choice=4;
         setContentView(R.layout.activity_main2);
         textView2=findViewById(R.id.textView2);
         editText=findViewById(R.id.editText);
@@ -263,10 +289,11 @@ public class Main extends AppCompatActivity {
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_layout, null);
         builde.setView(customLayout);
         h=builde.create();
+        h.show();
 
 
         codes=new HashSet<String>();
-        MainActivity.subo=new HashMap<>();
+        subo=new HashMap<>();
         creds= findViewById(R.id.creds);
         spin =new HashMap<>();
         recyclerView=findViewById(R.id.rec);
@@ -296,8 +323,8 @@ public class Main extends AppCompatActivity {
         });
 
 
-        if(savedInstanceState==null)
-        {
+//        if(savedInstanceState==null)
+//        {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Api.BASE_URL) // Specify your api here
                     .addConverterFactory(GsonConverterFactory.create())
@@ -332,7 +359,7 @@ public class Main extends AppCompatActivity {
                             if (progressDoalog.getProgress() == progressDoalog
                                     .getMax()) {
                                 progressDoalog.dismiss();
-                                h.show();
+
                             }
                         }
                     } catch (Exception e) {
@@ -353,7 +380,7 @@ public class Main extends AppCompatActivity {
                         for(int i=0;i<resp.length;i++)
                         {
                             contacts.add(resp[i].getCode()+"  "+resp[i].getTitle());
-                            MainActivity.subo.put(resp[i].getCode(),resp[i].getTitle());
+                            subo.put(resp[i].getCode(),resp[i].getTitle());
                             credit.put(resp[i].getCode(),resp[i].getCredits());
                             MainActivity.cre.put(resp[i].getCode(),resp[i].getCredits());
                             if(resp[i].getCode().substring(0,3).equals(f)==false)
@@ -373,6 +400,7 @@ public class Main extends AppCompatActivity {
                         public void run() {
                             progressDoalog.cancel();
                             Toast.makeText(Main.this, "Let's Go!!", Toast.LENGTH_SHORT).show();
+                            n=0;
                             //Do something after 100ms
                         }
                     }, 3000);
@@ -390,18 +418,21 @@ public class Main extends AppCompatActivity {
                 }
             });
             handle.sendMessage(handle.obtainMessage());
-        }
-        else{
-            Toast.makeText(this, "OnCreate", Toast.LENGTH_SHORT).show();
-            tot=savedInstanceState.getInt("Credits");
-        theory_choice=savedInstanceState.getInt("Choice");
-        contacts=savedInstanceState.getStringArrayList("Subjects list");
-        subcodes=savedInstanceState.getStringArrayList("Codes");
-        codes=new HashSet<String>(subcodes) ;
-        creds.setText("Credits Taken:"+tot);
-        credit=MainActivity.cre;
-        adapter.notifyDataSetChanged();
-        }
+//        }
+//        else{
+//            Toast.makeText(this, "OnCreate", Toast.LENGTH_SHORT).show();
+//            tot=savedInstanceState.getInt("Credits");
+//            if(progressDoalog!=null) {
+//                progressDoalog.dismiss();
+//            }
+//        theory_choice=savedInstanceState.getInt("Choice");
+//        contacts=savedInstanceState.getStringArrayList("Subjects list");
+//        subcodes=savedInstanceState.getStringArrayList("Codes");
+//        codes=new HashSet<String>(subcodes) ;
+//        creds.setText("Credits Taken:"+tot);
+//        credit=MainActivity.cre;
+//        adapter.notifyDataSetChanged();
+//        }
 
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -436,7 +467,7 @@ public class Main extends AppCompatActivity {
             }
         });
 
-    }
+  }
 
 
 }

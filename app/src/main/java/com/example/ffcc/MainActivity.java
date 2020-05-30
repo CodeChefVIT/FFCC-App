@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences shared;
     String verified;
     static Subjects[] respo;
-    static HashMap<String,String> subo;//Created a map with subject code as key and title as the value
+
     static HashMap<String,Integer> cre;
      AlertDialog.Builder builder;
     public boolean isConnected() {
