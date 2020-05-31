@@ -55,15 +55,13 @@ public class ForTeachers extends AppCompatActivity {
     int th;
     public void setAnimationEntry() {
         if (Build.VERSION.SDK_INT > 20) {
-            Explode explode = new Explode();
-            explode.setDuration(1000);
-            explode.setInterpolator(new BounceInterpolator());
+
             Slide slide = new Slide();
             slide.setSlideEdge(Gravity.TOP);
             slide.setDuration(900);
             slide.setInterpolator(new DecelerateInterpolator());
-            getWindow().setExitTransition(slide);
-            getWindow().setEnterTransition(explode);
+            getWindow().setExitTransition(new Explode().setDuration(1000));
+            getWindow().setEnterTransition(new Explode().setDuration(1000));
         }
     }
     boolean checker(String k)
@@ -93,6 +91,10 @@ public class ForTeachers extends AppCompatActivity {
             Intent I = new Intent(ForTeachers.this, ForTeachers.class);
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             if (true) {
+                if(codes.size()>4)
+                {
+                    Toast.makeText(this, "Select At most 4 teacher preference", Toast.LENGTH_SHORT).show();
+                }
                 //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
                 I.putExtra("Cho",th);
                 startActivity(I,options.toBundle());
@@ -114,13 +116,8 @@ public class ForTeachers extends AppCompatActivity {
         setContentView(R.layout.activity_for_teachers);
 
         Intent I=getIntent();
-        try {
             th = I.getIntExtra("Cho", 4);
-        }
-        catch(Exception e)
-        {
-            th=4;
-        }
+
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.forTeachers);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -212,7 +209,13 @@ public class ForTeachers extends AppCompatActivity {
                     {
                         String o=resp[i].getFaculty();
                         if(checker1(o)==true) {
-                            if(resp[i].getFlag().equals(String.valueOf(th))||(th==4)) {
+                            try {
+                                if (resp[i].getFlag().equals(String.valueOf(th)) || (th == 4)) {
+                                    contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
+                                }
+                            }
+                            catch (Exception e)
+                            {
                                 contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
                             }
 

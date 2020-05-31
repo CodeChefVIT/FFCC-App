@@ -40,7 +40,7 @@ public class TimeTable extends AppCompatActivity {
                 startx++;
             }
         }
-        else
+        else if(startx==endx)
         {
             while (endy >= starty) {
                 try {
@@ -51,6 +51,68 @@ public class TimeTable extends AppCompatActivity {
                 canvas.drawLine(startx, starty, endx, starty+1, paint);
                 starty++;
             }
+        }
+        else
+        {
+            while (endy != starty) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                canvas.drawLine(startx, starty, startx+1, starty+1, paint);
+                starty++;
+                startx++;
+            }
+
+        }
+    }
+    void maker1(int a,int b,int c,int d)
+    {
+        // Line
+        paint = new Paint();
+        paint.setColor(Color.rgb(255, 0, 0));
+        paint.setStrokeWidth(10);
+        int startx = a;
+        int starty = b;
+        int endx = c;
+        int endy = d;
+        if(starty==endy) {
+            while (endx >= startx) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                canvas.drawLine(startx, starty, startx + 1, endy, paint);
+                startx++;
+            }
+        }
+        else if(startx==endx)
+        {
+            while (endy >= starty) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                canvas.drawLine(startx, starty, endx, starty+1, paint);
+                starty++;
+            }
+        }
+        else
+        {
+            while (endy != starty) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                canvas.drawLine(startx, starty, startx+1, starty+1, paint);
+                starty++;
+                startx++;
+            }
+
         }
     }
     @Override
@@ -64,8 +126,24 @@ public class TimeTable extends AppCompatActivity {
                 .getDefaultDisplay().getHeight(), Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         drawingImageView.setImageBitmap(bitmap);
-        maker(1,10,500,10);
-        maker(10,1,10,500);
+        maker(0,0,680,0);
+        maker(0,0,0,1248);
+        for(int i=1;i<=12;i++){//columns
+            if(i!=7){
+            maker(0,96*i,680,96*i);}
+            else{
+                maker1(0,96*i,680,96*i);
+            }
+        }
+        for(int i=1;i<=8;i++){//row
+            if ((i != 1) && (i != 3)
+            )
+            {
+               maker(85*i,0,85*i,1248);
+            }
+        }
+        maker(0,1248,680,1248);
+        maker(680,0,680,1248);
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.timeTable);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

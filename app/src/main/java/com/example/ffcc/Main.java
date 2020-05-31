@@ -43,6 +43,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -133,15 +134,16 @@ public class Main extends AppCompatActivity {
         editor.clear();
         editor.putInt("Credits",tot);
         editor.putInt("Choice",theory_choice);
+        editor.putInt("Done",0);
 //        Gson gson = new Gson();
 //        String json = gson.toJson(numbers);
 //        editor.putString("MyObject", json);
         if(contacts.size()==0)
         {
-            editor.putStringSet("Subject List",new HashSet<String>());
+            editor.putStringSet("Subjects",new HashSet<String>());
         }
         else {
-            editor.putStringSet("Subject List", new HashSet<String>(contacts));
+            editor.putStringSet("Subjects", new HashSet<String>(contacts));
         }
 
         if(codes!=null) {
@@ -173,7 +175,7 @@ public class Main extends AppCompatActivity {
     int n=1;
     @Override
     protected  void onResume() {
-
+        Toast.makeText(this, "Resume", Toast.LENGTH_SHORT).show();
         super.onResume();
         if((progressDoalog!=null)&&(n==0))
         {
@@ -185,14 +187,16 @@ public class Main extends AppCompatActivity {
         tot=settings.getInt("Credits",0);
         theory_choice=settings.getInt("Choice",0);
         Set<String> strings = new HashSet<>();
-        contacts=new ArrayList<>(settings.getStringSet("Subjects list",strings));
+        contacts=new ArrayList<>(settings.getStringSet("Subjects",strings));
         subcodes=new ArrayList<>(settings.getStringSet("Codes",strings));
         codes=new HashSet<String>(subcodes) ;
         if(contacts!=null){
+            Toast.makeText(this, String.valueOf(contacts.size()), Toast.LENGTH_SHORT).show();
         for(int i=0;i<contacts.size();i++)
         {
            subo.put(contacts.get(i).substring(0,7),contacts.get(i).substring(8));
         }}
+        Collections.sort(contacts);
         creds.setText("Credits Taken:"+tot);
         credit=MainActivity.cre;
         ArrayAdapter<String> adapters =
@@ -238,6 +242,8 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setAnimationEntry();
+        SharedPreferences settings = getSharedPreferences("Data",MODE_PRIVATE);
+        int k=settings.getInt("Done",1);
         theory_choice=4;
         setContentView(R.layout.activity_main2);
         textView2=findViewById(R.id.textView2);
@@ -290,7 +296,10 @@ public class Main extends AppCompatActivity {
         builde.setView(customLayout);
         h=builde.create();
         h.show();
-
+//        if(settings.getInt("Choice",4)>=2)
+//        {
+//            h.show();
+//        }
 
         codes=new HashSet<String>();
         subo=new HashMap<>();
@@ -347,6 +356,7 @@ public class Main extends AppCompatActivity {
             progressDoalog.setTitle("Downloading data ");
             progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDoalog.setCancelable(false);
+            if(k==1)
             progressDoalog.show();
             new Thread(new Runnable() {
                 @Override
