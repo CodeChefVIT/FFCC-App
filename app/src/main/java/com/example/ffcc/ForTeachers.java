@@ -57,6 +57,7 @@ public class ForTeachers extends AppCompatActivity {
     Set<String> codes;
     Set<String>fac;
     int th;
+    ArrayList<String> contact;
     public void setAnimationEntry() {
         if (Build.VERSION.SDK_INT > 20) {
 
@@ -86,6 +87,35 @@ public class ForTeachers extends AppCompatActivity {
             FileWriter fr = new FileWriter(file, true);
             BufferedWriter br = new BufferedWriter(fr);
             PrintWriter pr = new PrintWriter(br);
+            pr.println(Main.subcodes.get(Main.noa));
+            if(contact!=null)
+            {
+                if(contact.size()<=4)
+                {
+                    for(int i=0;i<contact.size();i++)
+                    {
+                        pr.println(contact.get(i).substring(2));
+                    }
+                    for(int j=contact.size();j<4;j++)
+                    {
+                        pr.println("");
+                    }
+                }
+                else
+                {
+                    for(int i=0;i<4;i++)
+                    {
+                        pr.println(numbers.get(i).getCode()+":"+numbers.get(i).getName());
+                    }
+                }
+            }
+            else
+            {
+                for(int i=0;i<4;i++)
+                {
+                    pr.println("");
+                }
+            }
 
             pr.close();
             br.close();
@@ -119,6 +149,7 @@ public class ForTeachers extends AppCompatActivity {
                     Toast.makeText(this, "Select At most 4 teacher preference", Toast.LENGTH_SHORT).show();
                 }
                 //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
+                PrintToFile();
                 I.putExtra("Cho",th);
                 startActivity(I,options.toBundle());
             } else {
@@ -127,6 +158,7 @@ public class ForTeachers extends AppCompatActivity {
         }
         else{
             Intent I=new Intent(ForTeachers.this,TimeTable.class);
+            PrintToFile();
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
             startActivity(I,options.toBundle());
@@ -145,6 +177,7 @@ public class ForTeachers extends AppCompatActivity {
                 }
                 else {
                     //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
+                    PrintToFile();
                     I.putExtra("Cho", th);
                     startActivity(I, options.toBundle());
                 }
@@ -154,6 +187,7 @@ public class ForTeachers extends AppCompatActivity {
         }
         else{
             Intent I=new Intent(ForTeachers.this,TimeTable.class);
+            PrintToFile();
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
             startActivity(I,options.toBundle());
@@ -258,6 +292,21 @@ public class ForTeachers extends AppCompatActivity {
                     if(resp!=null) {
                         if(resp.length<=4)
                         {
+                            for (int i = 0; i < resp.length; i++)
+                            {
+                                String o = resp[i].getFaculty();
+                                if (checker1(o) == true) {
+                                    try {
+                                        if (resp[i].getFlag().equals(String.valueOf(th)) || (th == 4)) {
+                                            contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
+                                        }
+                                    } catch (Exception e) {
+                                        Toast.makeText(ForTeachers.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
+                                    }
+
+                                }
+                            }
                             starter();
                             progressDoalog.cancel();
                         }
@@ -296,6 +345,13 @@ public class ForTeachers extends AppCompatActivity {
 
             }
         });
+        if(contacts==null)
+        {
+            contact=new ArrayList<>();
+        }
+        else {
+            contact = contacts;
+        }
         numbers=new ArrayList<Subs>();
         adapter=new SubsAdapter(this,numbers);
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
