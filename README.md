@@ -41,7 +41,7 @@ $ python3 manage.py runserver
 - <a href="https://github.com/AdityaKeshan">Aditya Keshan</a>
 - <a href="https://github.com/tanyagupta17">Tanya Gupta</a>
 - <a href="https://github.com/aditya-beri">Aditya Beri</a>
-- <a href="https://github.com/tanyagupta17">Jofin F Archbald</a>
+- <a href="https://github.com/j0fiN">Jofin F Archbald</a>
 
 ## License
 
