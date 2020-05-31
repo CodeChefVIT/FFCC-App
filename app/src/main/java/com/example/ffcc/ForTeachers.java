@@ -27,6 +27,10 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,6 +78,25 @@ public class ForTeachers extends AppCompatActivity {
         }
         return false;
     }
+    void PrintToFile()
+    {
+        try{
+
+            File file = new File("Teac.txt");
+            FileWriter fr = new FileWriter(file, true);
+            BufferedWriter br = new BufferedWriter(fr);
+            PrintWriter pr = new PrintWriter(br);
+
+            pr.close();
+            br.close();
+            fr.close();
+
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
     boolean checker1(String k)
     {
         int a=fac.size();
@@ -98,6 +121,33 @@ public class ForTeachers extends AppCompatActivity {
                 //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
                 I.putExtra("Cho",th);
                 startActivity(I,options.toBundle());
+            } else {
+                Toast.makeText(this, "Please select at least 4 subjects", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Intent I=new Intent(ForTeachers.this,TimeTable.class);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
+            startActivity(I,options.toBundle());
+        }
+    }
+    public void starter()
+    {
+        Main.noa++;
+        if(Main.noa<Main.codes.size()) {
+            Intent I = new Intent(ForTeachers.this, ForTeachers.class);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            if (true) {
+                if(codes.size()>4)
+                {
+                    Toast.makeText(this, "Select At most 4 teacher preference", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
+                    I.putExtra("Cho", th);
+                    startActivity(I, options.toBundle());
+                }
             } else {
                 Toast.makeText(this, "Please select at least 4 subjects", Toast.LENGTH_SHORT).show();
             }
@@ -205,23 +255,35 @@ public class ForTeachers extends AppCompatActivity {
                     Teachers[] resp=response.body().toArray(new Teachers[0]);
                     Set<String> so=new HashSet<>();
                     Toast.makeText(ForTeachers.this, "Let's Go!!", Toast.LENGTH_SHORT).show();
-                    for(int i=0;i<resp.length;i++)
-                    {
-                        String o=resp[i].getFaculty();
-                        if(checker1(o)==true) {
-                            try {
-                                if (resp[i].getFlag().equals(String.valueOf(th)) || (th == 4)) {
+                    if(resp!=null) {
+                        if(resp.length<=4)
+                        {
+                            starter();
+                            progressDoalog.cancel();
+                        }
+                        else{
+                        for (int i = 0; i < resp.length; i++)
+                        {
+                            String o = resp[i].getFaculty();
+                            if (checker1(o) == true) {
+                                try {
+                                    if (resp[i].getFlag().equals(String.valueOf(th)) || (th == 4)) {
+                                        contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
+                                    }
+                                } catch (Exception e) {
+                                    Toast.makeText(ForTeachers.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
                                 }
-                            }
-                            catch (Exception e)
-                            {
-                                contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
-                            }
 
+                            }
+                        }
+                        progressDoalog.cancel();
                         }
                     }
-                    progressDoalog.cancel();
+                    else{
+                            starter();
+                            progressDoalog.cancel();
+                        }
                 }
             }
 

@@ -39,6 +39,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -103,6 +106,24 @@ public class Main extends AppCompatActivity {
     }
     public void nextAc()
     {
+        try{
+        File obj=new File("Teac.txt");
+        if(obj.createNewFile())
+        {
+
+        }
+        else
+        {
+            FileWriter fwOb = new FileWriter("Teac.txt", false);
+            PrintWriter pwOb = new PrintWriter(fwOb, false);
+            pwOb.flush();
+            pwOb.close();
+            fwOb.close();
+        }
+        }
+        catch (Exception e){
+
+        }
         if((tot>=16)&&(tot<=27)){
         noa=0;
         subcodes=new ArrayList<>(codes);

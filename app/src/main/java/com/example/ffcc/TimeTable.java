@@ -15,6 +15,11 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 public class TimeTable extends AppCompatActivity {
     ImageView drawingImageView;
     Canvas canvas;
@@ -67,6 +72,7 @@ public class TimeTable extends AppCompatActivity {
 
         }
     }
+
     void maker1(int a,int b,int c,int d)
     {
         // Line
