@@ -131,6 +131,7 @@ public class Main extends AppCompatActivity {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
         if(codes.size()>=4) {
             I.putExtra("Cho",theory_choice);
+//            Toast.makeText(this, theory_choice, Toast.LENGTH_SHORT).show();
             startActivity(I,options.toBundle());
         }
         else{

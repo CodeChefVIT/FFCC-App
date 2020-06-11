@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Main"
     android:id="@id/main2"
-    android:background="@drawable/back"
+    android:background="@drawable/subjects_bacl"
     android:orientation="vertical">
 
     <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
@@ -52,6 +52,7 @@
         android:layout_centerHorizontal="true"
         android:layout_above="@id/bottom_navigation"
         android:textColor="#000000"
+        android:textStyle="bold"
         android:textSize="20sp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

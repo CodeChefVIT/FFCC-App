@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import static com.example.ffcc.Main.credit;
+
 public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
     @NonNull
     public ArrayList<Subs> numbers;
@@ -62,7 +65,10 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
                 // remove your item from data base
                 String o=numbers.get(position).getCode();
                 Toast.makeText(con, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                int k=Main.credit.get(o);
+                int k=0;
+                if(credit!=null) {
+                     k = credit.get(o);
+                }
                 Main.tot-=k;
                 Main.creds.setText("Credits Taken:"+Main.tot);
                 Main.codes.remove(o);

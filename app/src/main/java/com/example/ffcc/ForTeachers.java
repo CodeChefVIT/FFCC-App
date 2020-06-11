@@ -45,7 +45,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ForTeachers extends AppCompatActivity {
-    TextView creds,textView ;
+    TextView textView ;
     RecyclerView recyclerView;
     Handler handle;
     Button next;
@@ -148,16 +148,18 @@ public class ForTeachers extends AppCompatActivity {
                 {
                     Toast.makeText(this, "Select At most 4 teacher preference", Toast.LENGTH_SHORT).show();
                 }
-                //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
-                PrintToFile();
-                I.putExtra("Cho",th);
-                startActivity(I,options.toBundle());
+                else {
+                    //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
+                    PrintToFile();
+                    I.putExtra("Cho", th);
+                    startActivity(I, options.toBundle());
+                }
             } else {
                 Toast.makeText(this, "Please select at least 4 subjects", Toast.LENGTH_SHORT).show();
             }
         }
         else{
-            Intent I=new Intent(ForTeachers.this,TimeTable.class);
+            Intent I=new Intent(ForTeachers.this, com.example.ffcc.List.class);
             PrintToFile();
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
@@ -186,7 +188,7 @@ public class ForTeachers extends AppCompatActivity {
             }
         }
         else{
-            Intent I=new Intent(ForTeachers.this,TimeTable.class);
+            Intent I=new Intent(ForTeachers.this,com.example.ffcc.List.class);
             PrintToFile();
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             //Main.choice.put(Main.subcodes.get(Main.noa-1),codes);
@@ -213,7 +215,7 @@ public class ForTeachers extends AppCompatActivity {
                         startActivity(I);
                         return true;
                     case R.id.forTeachers:return true;
-                    case R.id.timeTable:Intent I2=new Intent(getApplicationContext(),TimeTable.class);
+                    case R.id.timeTable:Intent I2=new Intent(getApplicationContext(),com.example.ffcc.List.class);
                         startActivity(I2);
                         return true;
 
@@ -224,7 +226,6 @@ public class ForTeachers extends AppCompatActivity {
 
         codes=new HashSet<String>();
         fac=new HashSet<>();
-        creds= findViewById(R.id.count);
         textView=findViewById(R.id.textView);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Api.BASE_URL) // Specify your api here
@@ -235,7 +236,6 @@ public class ForTeachers extends AppCompatActivity {
         spinner=findViewById(R.id.spinner);
         String subjectCode=Main.subcodes.get(Main.noa);
         textView.setText(subjectCode+"-"+Main.subo.get(subjectCode));
-        creds.setText("Page "+(Main.noa+1)+" of "+Main.subcodes.size());
         recyclerView=findViewById(R.id.rec);
         recyclerView.setHasFixedSize(true);
         spinner = (SearchableSpinner) findViewById(R.id.spinner);
@@ -311,12 +311,13 @@ public class ForTeachers extends AppCompatActivity {
                             progressDoalog.cancel();
                         }
                         else{
+                            th=1;
                         for (int i = 0; i < resp.length; i++)
                         {
                             String o = resp[i].getFaculty();
                             if (checker1(o) == true) {
                                 try {
-                                    if (resp[i].getFlag().equals(String.valueOf(th)) || (th == 4)) {
+                                    if (resp[i].getFlag().equals("1") || (th == 4)) {
                                         contacts.add(resp[i].getReview() + "," + resp[i].getSlot() + ":" + resp[i].getFaculty());
                                     }
                                 } catch (Exception e) {
@@ -379,6 +380,5 @@ public class ForTeachers extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         adapter=new SubsAdapter(this,numbers);
         recyclerView.setAdapter(adapter);
-        Toast.makeText(this, "FFCC", Toast.LENGTH_SHORT).show();
     }
 }
