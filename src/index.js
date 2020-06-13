@@ -10,7 +10,7 @@ const data = require('./dataReviews')
 
 // DataBase Config
 // const db = require('./config/keys').mongoURI;
-const connectionURL = process.env.DBURL
+const connectionURL = "mongodb+srv://jugalbhatt123:Panujugu123@cluster0-cmlwg.mongodb.net/test?retryWrites=true&w=majority"
 const databaseName = "TEST"
 
 
@@ -65,6 +65,8 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
     //     })
     
     // })
+
+  
 
     app.get("/time/subjectlab",(req,res)=>{
         var mysort = {CODE: 1 };
@@ -136,7 +138,7 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
     app.get("/time/subjectCode",(req,res)=>{
         var mysort = {CODE: 1 };
-        db.collection('Subjects').find({}).toArray((error,result)=>{
+        db.collection('Subjects').find({}).sort(mysort).toArray((error,result)=>{
             res.send(result)
  
     
