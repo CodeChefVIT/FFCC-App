@@ -28,7 +28,7 @@ public class Teachers {
     @SerializedName("FACULTY")
     @Expose
     private String faculty;
-    @SerializedName("FLAG")
+    @SerializedName("Flag")
     @Expose
     private String flag;
     @SerializedName("REVIEW")

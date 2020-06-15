@@ -65,13 +65,19 @@ public class SubsAdapter extends RecyclerView.Adapter<SubsAdapter.ViewHolder> {
                 // remove your item from data base
                 String o=numbers.get(position).getCode();
                 Toast.makeText(con, String.valueOf(position), Toast.LENGTH_SHORT).show();
-                int k=0;
-                if(credit!=null) {
-                     k = credit.get(o);
+                if(con==Main.context) {
+                    int k = 0;
+                    if (credit != null) {
+                        k = credit.get(o);
+                    }
+                    Main.tot -= k;
+                    Main.creds.setText("Credits Taken:" + Main.tot);
+                    Main.codes.remove(o);
                 }
-                Main.tot-=k;
-                Main.creds.setText("Credits Taken:"+Main.tot);
-                Main.codes.remove(o);
+                else
+                {
+                    ForTeachers.codes.remove(o);
+                }
                 numbers.remove(position);  // remove the item from list
                 notifyDataSetChanged(); // notify the adapter about the removed item
             }

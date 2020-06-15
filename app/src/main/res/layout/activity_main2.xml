@@ -9,14 +9,14 @@
     android:background="@drawable/subjects_bacl"
     android:orientation="vertical">
 
-    <gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner
+
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"/>
 
-    </gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner>
 
     <TextView
         android:id="@+id/textView"

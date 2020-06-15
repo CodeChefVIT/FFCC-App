@@ -3,9 +3,11 @@ package com.example.ffcc;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -53,8 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import gr.escsoft.michaelprimez.searchablespinner.SearchableSpinner;
-import gr.escsoft.michaelprimez.searchablespinner.interfaces.OnItemSelectedListener;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,19 +109,7 @@ public class Main extends AppCompatActivity {
     public void nextAc()
     {
         try{
-        File obj=new File("Teac.txt");
-        if(obj.createNewFile())
-        {
-
-        }
-        else
-        {
-            FileWriter fwOb = new FileWriter("Teac.txt", false);
-            PrintWriter pwOb = new PrintWriter(fwOb, false);
-            pwOb.flush();
-            pwOb.close();
-            fwOb.close();
-        }
+            context.deleteDatabase("TT");
         }
         catch (Exception e){
 
@@ -131,6 +121,7 @@ public class Main extends AppCompatActivity {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
         if(codes.size()>=4) {
             I.putExtra("Cho",theory_choice);
+            I.putExtra("List","");
 //            Toast.makeText(this, theory_choice, Toast.LENGTH_SHORT).show();
             startActivity(I,options.toBundle());
         }
@@ -170,7 +161,6 @@ public class Main extends AppCompatActivity {
 
         if(codes!=null) {
             editor.putStringSet("Codes", codes);
-            Toast.makeText(this, String.valueOf(codes.size()), Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -226,6 +216,7 @@ public class Main extends AppCompatActivity {
         adapters.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapters);
+        spinner.setTitle("Select your Subject");
         numbers.clear();
         Toast.makeText(this, String.valueOf(subo.size()), Toast.LENGTH_SHORT).show();
         for(int i=0;i<codes.size();i++)
@@ -260,11 +251,15 @@ public class Main extends AppCompatActivity {
 //        outState.putStringArrayList("Codes",subcodes);
 //
 //    }
+    static Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setAnimationEntry();
+        context=this;
         SharedPreferences settings = getSharedPreferences("Data",MODE_PRIVATE);
+        SQLiteDatabase my=this.openOrCreateDatabase("Choices",MODE_PRIVATE,null);
+        my.execSQL("CREATE TABLE IF NOT EXISTS Choices (code VARCHAR,ch VARCHAR)");
         int k=settings.getInt("Done",1);
         theory_choice=4;
         setContentView(R.layout.activity_main2);
@@ -329,11 +324,11 @@ public class Main extends AppCompatActivity {
         spin =new HashMap<>();
         recyclerView=findViewById(R.id.rec);
         spinner=findViewById(R.id.spinner);
+        spinner.setTitle("Select your subject:");
         contacts = new ArrayList<>();
         next=findViewById(R.id.send);
         recyclerView.setHasFixedSize(true);
         credit=new HashMap<>();
-
         ArrayAdapter<String> adapters =
                 new ArrayAdapter<String>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, contacts);
         adapters.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
@@ -431,7 +426,6 @@ public class Main extends AppCompatActivity {
                         @Override
                         public void run() {
                             progressDoalog.cancel();
-                            Toast.makeText(Main.this, "Let's Go!!", Toast.LENGTH_SHORT).show();
                             n=0;
                             //Do something after 100ms
                         }
@@ -467,9 +461,9 @@ public class Main extends AppCompatActivity {
 //        }
 
 
-        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String k=contacts.get(position).substring(0, contacts.get(position).indexOf(' '));
                 boolean z=checker(k);
                 if(z==true) {
@@ -494,9 +488,19 @@ public class Main extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected() {
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
+//
+//            @Override
+//            public void onItemSelected(View view, int position, long id) {
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected() {
+//
+//            }
         });
 
   }

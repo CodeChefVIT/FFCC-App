@@ -6,19 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".TimeTable">
 
-
-    <LinearLayout
-        android:id="@+id/lin"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent">
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="center" />
-    </LinearLayout>
+            android:layout_width="396dp"
+            android:layout_height="597dp"
+            android:scaleType="fitXY"
+             />
+    </ScrollView>
+
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
