@@ -15,18 +15,18 @@
 
 ## Features
 - Choose Any number of subjects
--Choice for your choice of Theory Slots
--Give Preference for your subjects upto 4 Teachers 
+- Choice for your choice of Theory Slots
+- Give Preference for your subjects upto 4 Teachers 
 
 
 
 
 ## Screenshots
-<img src="https://github.com/CodeChefVIT/FFCC-App/raw/master/img/login_1.jpg" alt="Login Page1">
-<img src="https://github.com/CodeChefVIT/FFCC-App/raw/master/img/login_2.jpg" alt="Login Page2">
-<img src="https://github.com/CodeChefVIT/FFCC-App/raw/master/img/choice.jpg" alt="Theory Choice">
-<img src="https://github.com/CodeChefVIT/FFCC-App/raw/master/img/subject_selection.jpg" alt="Subjects">
-<img src="https://github.com/CodeChefVIT/FFCC-App/raw/master/img/Teacher.jpg" alt="Teacher">
+<img src="https://github.com/AdityaKeshan/FFCC/raw/master/img/login_1.jpg" alt="Login Page1">
+<img src="https://github.com/AdityaKeshan/FFCC/raw/master/img/login_2.jpg" alt="Login Page2">
+<img src="https://github.com/AdityaKeshan/FFCC/raw/master/img/choice.jpg" alt="Theory Choice">
+<img src="https://github.com/AdityaKeshan/FFCC/raw/master/img/subject_selection.jpg" alt="Subjects">
+<img src="https://github.com/AdityaKeshan/FFCC/raw/master/img/Teacher.jpg" alt="Teacher">
 
 ## Instructions to run
 
@@ -41,7 +41,7 @@ $ python3 manage.py runserver
 - <a href="https://github.com/AdityaKeshan">Aditya Keshan</a>
 - <a href="https://github.com/tanyagupta17">Tanya Gupta</a>
 - <a href="https://github.com/aditya-beri">Aditya Beri</a>
-- <a href="https://github.com/tanyagupta17">Jofin F Archbald</a>
+- <a href="https://github.com/j0fiN">Jofin F Archbald</a>
 
 ## License
 

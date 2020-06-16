@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Choose your Theory Slot"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="12dp"
+        android:textAlignment="center"
+        android:textSize="25sp"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:src="@drawable/evening2"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/textView3"
+            android:onClick="ase"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="Evening"
+            android:textSize="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="7dp"
+            android:background="@color/bb"
+            android:textColor="@color/w"
+            android:layout_marginTop="7dp"
+            android:textAlignment="center"
+            android:layout_below="@id/imageView"
+            android:layout_alignParentRight="true"
+            android:onClick="ase"/>
+
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/morning2"
+            android:layout_below="@id/textView3"
+            android:layout_alignParentLeft="true"
+            android:onClick="asm"
+            />
+
+        <TextView
+            android:id="@+id/editText"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="Morning"
+            android:textColor="@color/w"
+            android:background="@color/bb"
+            android:textAlignment="center"
+            android:layout_marginBottom="7dp"
+            android:textSize="15dp"
+            android:layout_marginLeft="50dp"
+            android:onClick="asm"
+            android:layout_below="@id/imageView2"/>
+
+</RelativeLayout>
