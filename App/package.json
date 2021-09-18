@@ -16,7 +16,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.5.5",
     "mongoose": "^5.12.3",
-    "validator": "^10.9.0"
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
