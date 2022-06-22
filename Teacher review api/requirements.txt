@@ -1,5 +1,5 @@
 pandas==0.25.1
-numpy==1.18.1
+numpy==1.22.0
 Flask==1.1.1
 nltk==3.6
 textblob==0.15.3
